@@ -13,14 +13,22 @@ app.secret_key = "feedback_secret_key"
 
 # ---------- DB CONNECTION ----------
 def db():
-    return mysql.connector.connect(
-        host=os.environ.get("MYSQLHOST"),
-        port=int(os.environ.get("MYSQLPORT")),
-        user=os.environ.get("MYSQLUSER"),
-        password=os.environ.get("MYSQLPASSWORD"),
-        database=os.environ.get("MYSQLDATABASE")
-    )
+    host = os.getenv("MYSQLHOST")
+    user = os.getenv("MYSQLUSER")
+    password = os.getenv("MYSQLPASSWORD")
+    database = os.getenv("MYSQLDATABASE")
+    port = os.getenv("MYSQLPORT")
 
+    if not all([host, user, password, database, port]):
+        raise Exception("Database environment variables not set properly")
+
+    return mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password,
+        database=database,
+        port=int(port)
+    )
 
 
 
