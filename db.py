@@ -1,15 +1,24 @@
 import mysql.connector
+import os
+from urllib.parse import urlparse
+
+# -------- CONNECT TO RAILWAY MYSQL --------
+url = urlparse(os.environ.get("MYSQL_URL"))
 
 con = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="root"
+    host=url.hostname,
+    user=url.username,
+    password=url.password,
+    database=url.path[1:],
+    port=url.port
 )
+
 cur = con.cursor()
+print("✅ Connected to Railway MySQL")
+
 
 # ------------------ CREATE DATABASE ------------------
-cur.execute("CREATE DATABASE IF NOT EXISTS feedbackdb")
-cur.execute("USE feedbackdb")
+
 print("✅ Database ready")
 
 # ------------------ DROP OLD TABLES ------------------
