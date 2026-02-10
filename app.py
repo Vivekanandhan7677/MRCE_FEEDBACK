@@ -1,5 +1,5 @@
 import os
-import urllib.parse as urlparse
+from urllib.parse import urlparse
 from flask import Flask, render_template, request, send_file, jsonify, redirect, url_for, session
 import mysql.connector
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
