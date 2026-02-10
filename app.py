@@ -15,19 +15,18 @@ app.secret_key = "feedback_secret_key"
 # ---------- DB CONNECTION ----------
 
 
+
 def db():
-    url = os.getenv("MYSQL_URL")
-    if not url:
-        raise Exception("MYSQL_URL not set in environment")
+    url = os.environ.get("MYSQL_URL")
 
     parsed = urlparse(url)
 
     return mysql.connector.connect(
         host=parsed.hostname,
-        port=parsed.port,
         user=parsed.username,
         password=parsed.password,
-        database=parsed.path.lstrip("/")
+        database=parsed.path.lstrip("/"),
+        port=parsed.port
     )
 
 
