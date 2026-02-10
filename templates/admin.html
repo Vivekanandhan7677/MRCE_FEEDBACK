@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Feedback Report</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma;}
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#36d1dc,#5b86e5);
+        }
+        .card{
+            background:#fff;
+            width:550px;
+            padding:35px;
+            border-radius:14px;
+            box-shadow:0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        /* -------- HEADER FIXED -------- */
+        .header{
+            text-align:center;
+            margin-bottom:20px;
+        }
+        .logo{
+            width:90px;
+            display:block;
+            margin:0 auto;
+        }
+        .header h1{
+            color:#0b3d91;
+            font-size:24px;
+            margin-top:8px;
+            font-weight:700;
+            letter-spacing:1px;
+        }
+
+        h2{text-align:center;margin:20px 0;}
+
+        .form-group{margin-bottom:15px;}
+        label{font-weight:600;margin-bottom:6px;display:block;}
+        select{width:100%;padding:10px;border-radius:6px;border:1px solid #ccc;}
+
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:18px;
+            border:none;
+            border-radius:6px;
+            background:#36d1dc;
+            color:#fff;
+            font-weight:600;
+            cursor:pointer;
+        }
+
+        .result{
+            margin-top:25px;
+            padding:18px;
+            background:#f8f9fc;
+            border-radius:10px;
+            text-align:center;
+        }
+
+        .pdf-btn{
+            background:#5b86e5;
+            margin-top:10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <!-- ✅ HEADER NOW PERFECTLY CENTERED -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='logo.png') }}" class="logo">
+        <h1>MALLA REDDY COLLEGE OF ENGINEERING</h1>
+    </div>
+
+    <h2>Admin Feedback Report</h2>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Branch</label>
+            <select name="branch" id="branch" onchange="loadSubjects()" required>
+                <option value="">--Select Branch--</option>
+                <option value="CSE_AI_ML">CSE(AI&ML)</option>
+                <option value="CSE">CSE</option>
+                <option value="AI_DS">AI&DS</option>
+                <option value="CSD">CSD</option>
+                <option value="ECE">ECE</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Year</label>
+            <select name="year" id="year" onchange="loadSubjects()" required>
+                <option value="">--Select Year--</option>
+                <option>I</option>
+                <option>II</option>
+                <option>III</option>
+                <option>IV</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Semester</label>
+            <select name="semester" id="semester" onchange="loadSubjects()" required>
+                <option value="">--Select Semester--</option>
+                <option>I</option>
+                <option>II</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Section</label>
+            <select name="section" id="section" onchange="loadSubjects()" required>
+                <option value="">--Select Section--</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+                <option>E</option>
+                <option>F</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Subject</label>
+            <select name="subject" id="subject" onchange="setFaculty()" required>
+                <option value="">--Select Subject--</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Faculty Name</label>
+            <select id="faculty" disabled></select>
+        </div>
+
+        <button type="submit">View Report</button>
+    </form>
+  
+
+
+    {% if percentage is not none %}
+    <div class="result">
+        <div>Responses: <b>{{ responses }}</b></div>
+        <div>Overall: <b>{{ "%.2f"|format(percentage) }}%</b></div>
+        <a href="/report">
+            <button type="button" class="pdf-btn">Generate PDF Report</button>
+        </a>
+    </div>
+    {% endif %}
+    
+
+</div>
+
+<script>
+function loadSubjects(){
+    let b = document.getElementById("branch").value;
+    let y = document.getElementById("year").value;
+    let s = document.getElementById("semester").value;
+    let sec = document.getElementById("section").value;
+
+    if(b && y && s && sec){
+        fetch(`/get_subjects?branch=${b}&year=${y}&semester=${s}&section=${sec}`)
+        .then(res => res.json())
+        .then(data => {
+            let subject = document.getElementById("subject");
+            let faculty = document.getElementById("faculty");
+
+            subject.innerHTML = '<option value="">--Select Subject--</option>';
+            faculty.innerHTML = '';
+
+            data.subjects.forEach(item => {
+                let opt = document.createElement("option");
+                opt.value = item.subject;
+                opt.textContent = item.subject;
+                opt.setAttribute("data-faculty", item.faculty);
+                subject.appendChild(opt);
+            });
+        });
+    }
+}
+
+function setFaculty(){
+    let subject = document.getElementById("subject");
+    let faculty = document.getElementById("faculty");
+
+    let selected = subject.selectedOptions[0];
+    if(selected){
+        faculty.innerHTML = `<option>${selected.getAttribute("data-faculty")}</option>`;
+    }
+}
+</script>
+
+</body>
+</html>

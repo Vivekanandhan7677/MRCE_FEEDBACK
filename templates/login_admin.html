@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <style>
+        body{
+            margin:0;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg,#36d1dc,#5b86e5);
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .card{
+            background:#fff;
+            width:400px;
+            padding:30px 35px;
+            border-radius:12px;
+            box-shadow:0 20px 40px rgba(0,0,0,0.3);
+            text-align:center;
+        }
+
+        .logo{
+            width:85px;
+            margin-bottom:10px;
+        }
+
+        h1{
+            color:#0b3d91;
+            font-size:20px;
+            margin-bottom:20px;
+        }
+
+        h2{
+            margin-bottom:20px;
+            color:#333;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin:8px 0;
+            border-radius:6px;
+            border:1px solid #ccc;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:15px;
+            border:none;
+            border-radius:6px;
+            background:#36d1dc;
+            color:white;
+            font-weight:600;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div class="card">
+
+    <img src="{{ url_for('static', filename='logo.png') }}" class="logo">
+    <h1>MALLA REDDY COLLEGE OF ENGINEERING</h1>
+
+    <h2>Admin Login</h2>
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Admin Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+</div>
+</body>
+</html>
