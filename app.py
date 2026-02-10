@@ -1,4 +1,5 @@
 import os
+import urllib.parse as urlparse
 from flask import Flask, render_template, request, send_file, jsonify, redirect, url_for, session
 import mysql.connector
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
@@ -12,23 +13,23 @@ app.secret_key = "feedback_secret_key"
 
 
 # ---------- DB CONNECTION ----------
-def db():
-    host = os.getenv("MYSQLHOST")
-    user = os.getenv("MYSQLUSER")
-    password = os.getenv("MYSQLPASSWORD")
-    database = os.getenv("MYSQLDATABASE")
-    port = os.getenv("MYSQLPORT")
 
-    if not all([host, user, password, database, port]):
-        raise Exception("Database environment variables not set properly")
+
+def db():
+    url = os.getenv("MYSQL_URL")
+    if not url:
+        raise Exception("MYSQL_URL not set in environment")
+
+    parsed = urlparse(url)
 
     return mysql.connector.connect(
-        host=host,
-        user=user,
-        password=password,
-        database=database,
-        port=int(port)
+        host=parsed.hostname,
+        port=parsed.port,
+        user=parsed.username,
+        password=parsed.password,
+        database=parsed.path.lstrip("/")
     )
+
 
 
 
