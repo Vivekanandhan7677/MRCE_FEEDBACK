@@ -13,11 +13,13 @@ app.secret_key = "feedback_secret_key"
 # ---------- DB CONNECTION ----------
 def db():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root",
-        database="feedbackdb"
+        host=os.environ.get("DB_HOST"),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASS"),
+        database=os.environ.get("DB_NAME"),
+        port=int(os.environ.get("DB_PORT"))
     )
+
 
 
 # ---------- LOAD SUBJECTS ----------
