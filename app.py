@@ -16,9 +16,10 @@ app.secret_key = "feedback_secret_key"
 
 
 
+
+
 def db():
     url = os.environ.get("MYSQL_URL")
-
     parsed = urlparse(url)
 
     return mysql.connector.connect(
