@@ -1,4 +1,4 @@
-flask
-gunicorn
+Flask
 mysql-connector-python
 reportlab
+gunicorn
