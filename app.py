@@ -253,8 +253,6 @@ def report():
     if not data:
         return "Generate report first"
 
-    from reportlab.lib.styles import ParagraphStyle
-
     rows = data["rows"]
     year, semester, branch, section, subject, faculty = data["info"]
     responses = data["responses"]
@@ -277,13 +275,6 @@ def report():
     styles = getSampleStyleSheet()
     elements = []
 
-    # ---------- WRAP STYLE (IMPORTANT) ----------
-    wrap_style = ParagraphStyle(
-        'wrap',
-        fontSize=9,
-        leading=11,
-    )
-
     # ---------- HEADER ----------
     logo_path = os.path.join(app.root_path, 'static', 'logo.png')
     img = Image(logo_path, width=55, height=55)
@@ -299,34 +290,21 @@ def report():
     elements.append(Paragraph("<b>Feedback Form Report</b>", styles['Heading2']))
     elements.append(Spacer(1, 10))
 
-    # ---------- INFO TABLE (FIXED) ----------
+    # ---------- INFO TABLE ----------
     info = [
-        ["Branch", Paragraph(branch, wrap_style),
-         "Year", Paragraph(year, wrap_style),
-         "Semester", Paragraph(semester, wrap_style)],
-
-        ["Section", Paragraph(section, wrap_style),
-         "Subject", Paragraph(subject, wrap_style),
-         "Faculty", Paragraph(faculty, wrap_style)],
-
-        ["Responses", Paragraph(str(responses), wrap_style),
-         "", "", ""]
+        ["Branch", branch, "Year", year, "Semester", semester],
+        ["Section", section, "Subject", subject, "Faculty", faculty],
+        ["Responses", str(responses), "", "", ""]
     ]
 
-    t = Table(info, colWidths=[55,140,55,70,200])
+    t = Table(info, colWidths=[55,140,55,70,170])
+
+
     t.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 1, colors.black),
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
-        ('ALIGN', (1,0), (1,-1), 'LEFT'),
-        ('ALIGN', (3,0), (3,-1), 'LEFT'),
-        ('ALIGN', (4,0), (4,-1), 'LEFT'),
-        ('LEFTPADDING', (0,0), (-1,-1), 8),
-        ('RIGHTPADDING', (0,0), (-1,-1), 8),
-        ('TOPPADDING', (0,0), (-1,-1), 6),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
         ('FONTSIZE', (0,0), (-1,-1), 9),
     ]))
-
     elements.append(t)
     elements.append(Spacer(1, 10))
 
@@ -382,9 +360,10 @@ def report():
             elements.append(Paragraph(f"{i}. {s}", styles['Normal']))
             elements.append(Spacer(1, 4))
 
+    # ---------- FLEXIBLE SPACE BEFORE SIGNATURE ----------
     elements.append(Spacer(1, 80))
 
-    # ---------- SIGNATURE ----------
+    # ---------- SIGNATURE TABLE ----------
     sign_table = Table(
         [["HOD Signature", "", "Principal Signature"],
          ["", "", ""]],
@@ -400,7 +379,6 @@ def report():
 
     doc.build(elements)
     return send_file(file, as_attachment=True)
-
 
 
 
