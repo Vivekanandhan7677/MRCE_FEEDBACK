@@ -297,7 +297,7 @@ def report():
         ["Responses", str(responses), "", "", ""]
     ]
 
-    t = Table(info, colWidths=[55,50,55,100,120])
+    t = Table(info, colWidths=[55,50,55,170,100])
 
 
     t.setStyle(TableStyle([
