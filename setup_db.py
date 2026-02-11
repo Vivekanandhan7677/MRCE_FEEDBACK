@@ -1,20 +1,18 @@
 import mysql.connector
-import os
-from urllib.parse import urlparse
-
-# -------- CONNECT TO RAILWAY MYSQL --------
-url = urlparse(os.environ.get("MYSQL_URL"))
 
 con = mysql.connector.connect(
-    host=url.hostname,
-    user=url.username,
-    password=url.password,
-    database=url.path[1:],
-    port=url.port
+    host="centerbeam.proxy.rlwy.net",
+    user="root",
+    password="OsLJHhJqgnJxdeTjuyUEZzYFOksChhHN",
+    database="railway",
+    port=46155,
+    ssl_disabled=False
 )
 
 cur = con.cursor()
-print("✅ Connected to Railway MySQL")
+
+cur.execute("SET FOREIGN_KEY_CHECKS = 0")
+
 
 
 # ------------------ CREATE DATABASE ------------------
