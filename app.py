@@ -341,7 +341,7 @@ def report():
             counts[i][0], total
         ])
 
-    table = Table(table_data, colWidths=[165,60,60,60,60,60,40])
+    table = Table(table_data, colWidths=[165,60,60,60,80,60,40])
     table.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 1, colors.black),
         ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
