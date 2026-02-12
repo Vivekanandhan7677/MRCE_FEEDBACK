@@ -267,9 +267,12 @@ def report():
 
     file = "feedback_report.pdf"
     doc = SimpleDocTemplate(
-        file, pagesize=A4,
-        rightMargin=20, leftMargin=20,
-        topMargin=20, bottomMargin=20
+        file,
+        pagesize=A4,
+        rightMargin=20,
+        leftMargin=20,
+        topMargin=20,
+        bottomMargin=20
     )
 
     styles = getSampleStyleSheet()
@@ -288,7 +291,7 @@ def report():
     ))
     elements.append(Spacer(1, 6))
     elements.append(Paragraph("<b>Feedback Form Report</b>", styles['Heading2']))
-    elements.append(Spacer(1, 10))
+    elements.append(Spacer(1, 12))
 
     # ---------- INFO TABLE ----------
     info = [
@@ -297,25 +300,24 @@ def report():
         ["Responses", str(responses), "", "", ""]
     ]
 
-    t = Table(info, colWidths=[55,50,55,180,100])
-
-
+    t = Table(info, colWidths=[55,60,60,150,100])
     t.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 1, colors.black),
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
         ('FONTSIZE', (0,0), (-1,-1), 9),
     ]))
+
     elements.append(t)
-    elements.append(Spacer(1, 10))
+    elements.append(Spacer(1, 12))
 
     # ---------- PERCENTAGE ----------
     elements.append(Paragraph(
         f"<b>Overall Feedback Percentage: {percentage:.2f}%</b>",
         styles['Normal']
     ))
-    elements.append(Spacer(1, 11))
+    elements.append(Spacer(1, 12))
 
-    # ---------- QUESTIONS TABLE ----------
+    # ---------- QUESTIONS ----------
     questions = [
         "Teacher comes to the class in time",
         "Teacher comes well planned and prepared",
@@ -326,32 +328,68 @@ def report():
         "Teacher is courteous and impartial",
         "Teacher maintains discipline",
         "Teacher completes syllabus at proper pace",
-        "Teacher gives feedback on answer scripts",
-        "Total"
+        "Teacher gives feedback on answer scripts"
     ]
 
-    table_data = ["sl no.",[Paragraph("<b>Criteria</b>", styles['Normal']),
-                   "VeryGood(5)","Good(4)","Average(3)","BelowAverage(2)","Poor(1)","Total"]]
+    # Header row
+    table_data = [[
+        "Sl.No",
+        Paragraph("<b>Criteria</b>", styles['Normal']),
+        "VeryGood(5)",
+        "Good(4)",
+        "Average(3)",
+        "BelowAvg(2)",
+        "Poor(1)",
+        "Total"
+    ]]
 
+    grand_total = [0]*5
+    overall_total = 0
+
+    # Question rows
     for i, q in enumerate(questions):
         total = sum(counts[i])
+        overall_total += total
+
+        for j in range(5):
+            grand_total[j] += counts[i][j]
+
         table_data.append([
+            i+1,
             Paragraph(q, styles['Normal']),
-            counts[i][4], counts[i][3],
-            counts[i][2], counts[i][1],
-            counts[i][0], total
+            counts[i][4],
+            counts[i][3],
+            counts[i][2],
+            counts[i][1],
+            counts[i][0],
+            total
         ])
 
-    table = Table(table_data, colWidths=[20,165,60,60,60,80,60,40])
+    # Grand Total Row
+    table_data.append([
+        "",
+        Paragraph("<b>Grand Total</b>", styles['Normal']),
+        grand_total[4],
+        grand_total[3],
+        grand_total[2],
+        grand_total[1],
+        grand_total[0],
+        overall_total
+    ])
+
+    table = Table(table_data, colWidths=[35,165,55,55,55,65,55,50])
+
     table.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 1, colors.black),
         ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
-        ('ALIGN', (1,1), (-1,-1), 'CENTER'),
+        ('BACKGROUND', (0,-1), (-1,-1), colors.lightgrey),
+        ('ALIGN', (2,1), (-1,-1), 'CENTER'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('FONTSIZE', (0,0), (-1,-1), 8),
     ]))
 
     elements.append(table)
-    elements.append(Spacer(1, 12))
+    elements.append(Spacer(1, 15))
 
     # ---------- SUGGESTIONS ----------
     if suggestions:
@@ -361,15 +399,15 @@ def report():
             elements.append(Paragraph(f"{i}. {s}", styles['Normal']))
             elements.append(Spacer(1, 4))
 
-    # ---------- FLEXIBLE SPACE BEFORE SIGNATURE ----------
-    elements.append(Spacer(1, 80))
+    elements.append(Spacer(1, 70))
 
-    # ---------- SIGNATURE TABLE ----------
+    # ---------- SIGNATURE ----------
     sign_table = Table(
         [["HOD Signature", "", "Principal Signature"],
          ["", "", ""]],
         colWidths=[220, 80, 220]
     )
+
     sign_table.setStyle(TableStyle([
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
         ('LINEABOVE', (0,1), (0,1), 1, colors.black),
@@ -380,6 +418,7 @@ def report():
 
     doc.build(elements)
     return send_file(file, as_attachment=True)
+
 
 
 
