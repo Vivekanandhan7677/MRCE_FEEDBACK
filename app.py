@@ -313,7 +313,7 @@ def report():
         f"<b>Overall Feedback Percentage: {percentage:.2f}%</b>",
         styles['Normal']
     ))
-    elements.append(Spacer(1, 10))
+    elements.append(Spacer(1, 11))
 
     # ---------- QUESTIONS TABLE ----------
     questions = [
@@ -326,10 +326,11 @@ def report():
         "Teacher is courteous and impartial",
         "Teacher maintains discipline",
         "Teacher completes syllabus at proper pace",
-        "Teacher gives feedback on answer scripts"
+        "Teacher gives feedback on answer scripts",
+        "Total"
     ]
 
-    table_data = [[Paragraph("<b>Criteria</b>", styles['Normal']),
+    table_data = ["sl no.",[Paragraph("<b>Criteria</b>", styles['Normal']),
                    "VeryGood(5)","Good(4)","Average(3)","BelowAverage(2)","Poor(1)","Total"]]
 
     for i, q in enumerate(questions):
@@ -341,7 +342,7 @@ def report():
             counts[i][0], total
         ])
 
-    table = Table(table_data, colWidths=[165,60,60,60,80,60,40])
+    table = Table(table_data, colWidths=[20,165,60,60,60,80,60,40])
     table.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 1, colors.black),
         ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
