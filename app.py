@@ -330,7 +330,7 @@ def report():
     ]
 
     table_data = [[Paragraph("<b>Criteria</b>", styles['Normal']),
-                   "Very Good","Good","Average","Below Average","Poor","Total"]]
+                   "VeryGood(5)","Good(4)","Average(3)","BelowAverage(2)","Poor(1)","Total"]]
 
     for i, q in enumerate(questions):
         total = sum(counts[i])
@@ -341,7 +341,7 @@ def report():
             counts[i][0], total
         ])
 
-    table = Table(table_data, colWidths=[165,30,30,30,30,30,40])
+    table = Table(table_data, colWidths=[165,60,60,60,60,60,40])
     table.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 1, colors.black),
         ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
