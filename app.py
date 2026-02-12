@@ -330,7 +330,7 @@ def report():
     ]
 
     table_data = [[Paragraph("<b>Criteria</b>", styles['Normal']),
-                   "5","4","3","2","1","Total"]]
+                   "Very Good","Good","Average","Below Average","Poor","Total"]]
 
     for i, q in enumerate(questions):
         total = sum(counts[i])
