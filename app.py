@@ -300,7 +300,7 @@ def report():
         ["Responses", str(responses), "", "", ""]
     ]
 
-    t = Table(info, colWidths=[55,60,60,150,100])
+    t = Table(info, colWidths=[55,50,55,180,100])
     t.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 1, colors.black),
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
