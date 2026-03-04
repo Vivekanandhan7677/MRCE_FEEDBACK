@@ -1,37 +1,28 @@
-import mysql.connector
+import psycopg2
+import os
 
-con = mysql.connector.connect(
-    host="centerbeam.proxy.rlwy.net",
-    user="root",
-    password="OsLJHhJqgnJxdeTjuyUEZzYFOksChhHN",
-    database="railway",
-    port=46155,
-    ssl_disabled=False
+
+con = psycopg2.connect(
+    "postgresql://leave_db_hwlb_user:PWasFbasV9ZXPa5wdNc86GB1IzRVVcpz@dpg-d6j7qa9aae7s739dpt40-a.oregon-postgres.render.com/leave_db_hwlb"
 )
 
 cur = con.cursor()
+print("✅ Connected successfully")
+cur = con.cursor()
 
-cur.execute("SET FOREIGN_KEY_CHECKS = 0")
-
-
-
-# ------------------ CREATE DATABASE ------------------
-
-print("✅ Database ready")
+print("✅ Connected to Render PostgreSQL")
 
 # ------------------ DROP OLD TABLES ------------------
-cur.execute("SET FOREIGN_KEY_CHECKS = 0")
 cur.execute("DROP TABLE IF EXISTS answers")
 cur.execute("DROP TABLE IF EXISTS students_feedback")
 cur.execute("DROP TABLE IF EXISTS subjects")
-cur.execute("DROP TABLE IF EXISTS users")
-cur.execute("SET FOREIGN_KEY_CHECKS = 1")
+cur.execute("DROP TABLE IF EXISTS users CASCADE")
 print("✅ Old tables removed")
 
 # ------------------ USERS TABLE ------------------
 cur.execute("""
 CREATE TABLE users(
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE,
     password VARCHAR(50),
     role VARCHAR(20)
@@ -48,7 +39,7 @@ print("✅ users table created")
 # ------------------ SUBJECTS TABLE ------------------
 cur.execute("""
 CREATE TABLE subjects(
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     branch VARCHAR(30),
     year VARCHAR(10),
     semester VARCHAR(10),
@@ -63,7 +54,7 @@ print("✅ subjects table created")
 # ------------------ STUDENTS FEEDBACK TABLE (UPDATED) ------------------
 cur.execute("""
 CREATE TABLE students_feedback(
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     login_id VARCHAR(50),   -- ⭐ VERY IMPORTANT
     name VARCHAR(100),
     roll VARCHAR(50),
@@ -80,7 +71,7 @@ print("✅ students_feedback table created")
 # ------------------ ANSWERS TABLE ------------------
 cur.execute("""
 CREATE TABLE answers(
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     feedback_id INT,
     q1 INT, q2 INT, q3 INT, q4 INT, q5 INT,
     q6 INT, q7 INT, q8 INT, q9 INT, q10 INT,
@@ -507,8 +498,7 @@ VALUES (%s,%s,%s,%s,%s,%s)
 """, subjects_data)
 
 print("✅ subjects inserted")
-
 con.commit()
 con.close()
 
-print("🎉 DATABASE PERFECTLY MATCHED WITH FLASK APP!")
+print("🎉 PostgreSQL Database Ready!")

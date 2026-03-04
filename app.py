@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, send_file, jsonify, redirect, url_for, session
-import mysql.connector
+import os
+import psycopg2
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
@@ -14,20 +15,11 @@ app.secret_key = "feedback_secret_key"
 # ---------- DB CONNECTION ----------
 
 
-def db():
-    return mysql.connector.connect(
-        host=os.environ.get("MYSQLHOST"),
-        user=os.environ.get("MYSQLUSER"),
-        password=os.environ.get("MYSQLPASSWORD"),
-        database=os.environ.get("MYSQLDATABASE"),
-        port=int(os.environ.get("MYSQLPORT")),
-        ssl_disabled=False
-    )
 
 
-con = db()
-cur = con.cursor()
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
+conn = psycopg2.connect(DATABASE_URL)
 
 # ---------- LOAD SUBJECTS ----------
 @app.route("/get_subjects")
