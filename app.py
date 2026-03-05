@@ -20,7 +20,7 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 def db():
     if not DATABASE_URL:
         raise Exception("DATABASE_URL not set")
-    return psycopg2.connect(DATABASE_URL)
+    return psycopg2.connect(DATABASE_URL, sslmode="require")
 
 @app.route('/favicon.ico')
 def favicon():
