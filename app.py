@@ -18,7 +18,13 @@ app.secret_key = "feedback_secret_key"
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 def db():
+    if not DATABASE_URL:
+        raise Exception("DATABASE_URL not set")
     return psycopg2.connect(DATABASE_URL)
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_file(os.path.join(app.root_path, 'static', 'logo.png'))
 # ---------- LOAD SUBJECTS ----------
 @app.route("/get_subjects")
 def get_subjects():
