@@ -15,12 +15,10 @@ app.secret_key = "feedback_secret_key"
 # ---------- DB CONNECTION ----------
 
 
+DATABASE_URL = os.environ.get("postgresql://feedback_db_f0p9_user:01qTqdmgZWj9HywhURaIEqEPhOyIaS1t@dpg-d6kk3h3h46gs73cvutt0-a.oregon-postgres.render.com/feedback_db_f0p9")
 
-
-DATABASE_URL = os.environ.get("DATABASE_URL")
-
-conn = psycopg2.connect(DATABASE_URL)
-
+def db():
+    return psycopg2.connect(DATABASE_URL)
 # ---------- LOAD SUBJECTS ----------
 @app.route("/get_subjects")
 def get_subjects():
@@ -107,6 +105,7 @@ def student_page():
             INSERT INTO students_feedback
             (name, roll, year, semester, branch, section, subject, suggestion, login_id)
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            RETURNING id
         """, (
             data['name'],
             session["user"],
@@ -119,9 +118,12 @@ def student_page():
             session["user"]
         ))
 
-        fid = cur.lastrowid
+        fid = cur.fetchone()[0]
+
+        # Get answers
         answers = [int(data[f"q{i}"]) for i in range(1, 11)]
 
+        # Insert answers
         cur.execute("""
             INSERT INTO answers
             (feedback_id,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10)
@@ -129,7 +131,9 @@ def student_page():
         """, (fid, *answers))
 
         con.commit()
+        cur.close()
         con.close()
+
         return "<h2>Feedback Submitted Successfully</h2>"
 
     return render_template("student.html", roll=session["user"])
@@ -419,14 +423,14 @@ def report():
 def reset_feedback():
     con = db()
     cur = con.cursor()
-    cur.execute("SET FOREIGN_KEY_CHECKS = 0")
-    cur.execute("TRUNCATE TABLE answers")
-    cur.execute("TRUNCATE TABLE students_feedback")
-    cur.execute("SET FOREIGN_KEY_CHECKS = 1")
+
+    cur.execute("TRUNCATE TABLE answers RESTART IDENTITY CASCADE")
+    cur.execute("TRUNCATE TABLE students_feedback RESTART IDENTITY CASCADE")
+
     con.commit()
     con.close()
-    return "All Feedback Reset Successfully!"
 
+    return "All Feedback Reset Successfully!"
 
 if __name__ == "__main__":
     app.run(debug=True)

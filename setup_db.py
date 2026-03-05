@@ -1,14 +1,11 @@
 import psycopg2
-import os
 
-
-con = psycopg2.connect(
-    "postgresql://leave_db_hwlb_user:PWasFbasV9ZXPa5wdNc86GB1IzRVVcpz@dpg-d6j7qa9aae7s739dpt40-a.oregon-postgres.render.com/leave_db_hwlb"
+# PostgreSQL connection
+conn = psycopg2.connect(
+    "postgresql://feedback_db_f0p9_user:01qTqdmgZWj9HywhURaIEqEPhOyIaS1t@dpg-d6kk3h3h46gs73cvutt0-a.oregon-postgres.render.com/feedback_db_f0p9"
 )
 
-cur = con.cursor()
-print("✅ Connected successfully")
-cur = con.cursor()
+cur = conn.cursor()
 
 print("✅ Connected to Render PostgreSQL")
 
@@ -17,8 +14,8 @@ cur.execute("DROP TABLE IF EXISTS answers")
 cur.execute("DROP TABLE IF EXISTS students_feedback")
 cur.execute("DROP TABLE IF EXISTS subjects")
 cur.execute("DROP TABLE IF EXISTS users CASCADE")
-print("✅ Old tables removed")
 
+print("✅ Old tables removed")
 # ------------------ USERS TABLE ------------------
 cur.execute("""
 CREATE TABLE users(
@@ -498,7 +495,8 @@ VALUES (%s,%s,%s,%s,%s,%s)
 """, subjects_data)
 
 print("✅ subjects inserted")
-con.commit()
-con.close()
+conn.commit()
+cur.close()
+conn.close()
 
-print("🎉 PostgreSQL Database Ready!")
+print("✅ Database setup completed successfully")
