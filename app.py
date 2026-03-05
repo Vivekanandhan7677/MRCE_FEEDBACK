@@ -15,7 +15,7 @@ app.secret_key = "feedback_secret_key"
 # ---------- DB CONNECTION ----------
 
 
-DATABASE_URL = os.environ.get("postgresql://feedback_db_f0p9_user:01qTqdmgZWj9HywhURaIEqEPhOyIaS1t@dpg-d6kk3h3h46gs73cvutt0-a.oregon-postgres.render.com/feedback_db_f0p9")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 def db():
     return psycopg2.connect(DATABASE_URL)
@@ -433,4 +433,5 @@ def reset_feedback():
     return "All Feedback Reset Successfully!"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
