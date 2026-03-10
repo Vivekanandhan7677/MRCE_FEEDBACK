@@ -388,8 +388,9 @@ answers["q"+i]=val.value;
 
 }
 
-answers["subject"]=subjects[currentIndex].subject;
-answers["faculty"]=subjects[currentIndex].faculty;
+answers["subject"] = subjects[currentIndex].subject;
+answers["faculty"] = subjects[currentIndex].faculty;
+answers["suggestion"] = document.querySelector("textarea").value;
 
 feedbackData.push(answers);
 

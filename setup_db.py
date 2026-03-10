@@ -15,6 +15,7 @@ cur.execute("DROP TABLE IF EXISTS students_feedback")
 cur.execute("DROP TABLE IF EXISTS subjects")
 cur.execute("DROP TABLE IF EXISTS users CASCADE")
 
+
 print("✅ Old tables removed")
 # ------------------ USERS TABLE ------------------
 cur.execute("""

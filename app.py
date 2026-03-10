@@ -116,6 +116,7 @@ def student_page():
         for fb in feedback_list:
 
             subject = fb["subject"]
+            suggestion = fb.get("suggestion")
 
             # Prevent duplicate feedback
             cur.execute("""
@@ -128,20 +129,20 @@ def student_page():
 
             # Insert feedback
             cur.execute("""
-                INSERT INTO students_feedback
-                (name, roll, year, semester, branch, section, subject, login_id)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-            """, (
-                name,
-                roll,
-                year,
-                semester,
-                branch,
-                section,
-                subject,
-                roll
-            ))
-
+INSERT INTO students_feedback
+(name, roll, year, semester, branch, section, subject, suggestion, login_id)
+VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+""", (
+name,
+roll,
+year,
+semester,
+branch,
+section,
+subject,
+suggestion,
+roll
+))
             # Get last inserted id
             cur.execute("SELECT LASTVAL()")
             fid = cur.fetchone()[0]
