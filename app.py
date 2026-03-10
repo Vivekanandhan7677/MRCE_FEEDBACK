@@ -88,53 +88,82 @@ def student_login():
 # ---------- STUDENT PAGE ----------
 @app.route("/student", methods=["GET", "POST"])
 def student_page():
+
     if "user" not in session:
         return redirect(url_for("student_login"))
 
     if request.method == "POST":
-        data = request.form
+
+        import json
+
         con = db()
         cur = con.cursor()
 
-        # Prevent duplicate feedback
-        cur.execute("""
-            SELECT id FROM students_feedback
-            WHERE login_id=%s AND subject=%s
-        """, (session["user"], data['subject']))
+        name = request.form.get("name")
+        roll = session["user"]
+        year = request.form.get("year")
+        semester = request.form.get("semester")
+        branch = request.form.get("branch")
+        section = request.form.get("section")
 
-        if cur.fetchone():
-            con.close()
-            return "<h3>You have already submitted feedback for this subject.</h3>"
+        feedback_json = request.form.get("all_feedback")
 
-        # Insert feedback
-        cur.execute("""
-            INSERT INTO students_feedback
-            (name, roll, year, semester, branch, section, subject, suggestion, login_id)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            RETURNING id
-        """, (
-            data['name'],
-            session["user"],
-            data['year'],
-            data['semester'],
-            data['branch'],
-            data['section'],
-            data['subject'],
-            data.get('suggestion'),
-            session["user"]
-        ))
+        if not feedback_json:
+            return "<h3>No feedback received</h3>"
 
-        fid = cur.fetchone()[0]
+        feedback_list = json.loads(feedback_json)
 
-        # Get answers
-        answers = [int(data[f"q{i}"]) for i in range(1, 11)]
+        for fb in feedback_list:
 
-        # Insert answers
-        cur.execute("""
-            INSERT INTO answers
-            (feedback_id,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        """, (fid, *answers))
+            subject = fb["subject"]
+            faculty = fb["faculty"]
+
+            # Prevent duplicate feedback
+            cur.execute("""
+                SELECT id FROM students_feedback
+                WHERE login_id=%s AND subject=%s
+            """, (roll, subject))
+
+            if cur.fetchone():
+                continue
+
+            # Insert feedback
+            cur.execute("""
+                INSERT INTO students_feedback
+                (name, roll, year, semester, branch, section, subject, faculty, login_id)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                RETURNING id
+            """, (
+                name,
+                roll,
+                year,
+                semester,
+                branch,
+                section,
+                subject,
+                faculty,
+                roll
+            ))
+
+            fid = cur.fetchone()[0]
+
+            cur.execute("""
+                INSERT INTO answers
+                (feedback_id,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            """, (
+                fid,
+                int(fb["q1"]),
+                int(fb["q2"]),
+                int(fb["q3"]),
+                int(fb["q4"]),
+                int(fb["q5"]),
+                int(fb["q6"]),
+                int(fb["q7"]),
+                int(fb["q8"]),
+                int(fb["q9"]),
+                int(fb["q10"])
+            ))
 
         con.commit()
         cur.close()
