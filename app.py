@@ -129,21 +129,19 @@ def student_page():
 
             # Insert feedback
             cur.execute("""
-                INSERT INTO students_feedback
-                (name, roll, year, semester, branch, section, subject, faculty, login_id)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                RETURNING id
-            """, (
-                name,
-                roll,
-                year,
-                semester,
-                branch,
-                section,
-                subject,
-                faculty,
-                roll
-            ))
+INSERT INTO students_feedback
+(name, roll, year, semester, branch, section, subject, login_id)
+VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+""", (
+name,
+roll,
+year,
+semester,
+branch,
+section,
+subject,
+roll
+))
 
             fid = cur.fetchone()[0]
 
