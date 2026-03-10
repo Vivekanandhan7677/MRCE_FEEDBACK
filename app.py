@@ -116,7 +116,6 @@ def student_page():
         for fb in feedback_list:
 
             subject = fb["subject"]
-            faculty = fb["faculty"]
 
             # Prevent duplicate feedback
             cur.execute("""
@@ -129,22 +128,25 @@ def student_page():
 
             # Insert feedback
             cur.execute("""
-INSERT INTO students_feedback
-(name, roll, year, semester, branch, section, subject, login_id)
-VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-""", (
-name,
-roll,
-year,
-semester,
-branch,
-section,
-subject,
-roll
-))
+                INSERT INTO students_feedback
+                (name, roll, year, semester, branch, section, subject, login_id)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+            """, (
+                name,
+                roll,
+                year,
+                semester,
+                branch,
+                section,
+                subject,
+                roll
+            ))
 
+            # Get last inserted id
+            cur.execute("SELECT LASTVAL()")
             fid = cur.fetchone()[0]
 
+            # Insert answers
             cur.execute("""
                 INSERT INTO answers
                 (feedback_id,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10)
@@ -170,7 +172,6 @@ roll
         return "<h2>Feedback Submitted Successfully</h2>"
 
     return render_template("student.html", roll=session["user"])
-
 
 # ---------- LOGOUT ----------
 @app.route("/logout")
