@@ -467,6 +467,52 @@ def reset_feedback():
 
     return "All Feedback Reset Successfully!"
 
+from flask import request, render_template
+import psycopg2
+
+@app.route('/admin_report', methods=['GET', 'POST'])
+def admin_report():
+    data = []
+    summary = []
+
+    if request.method == 'POST':
+        branch = request.form['branch']
+        year = request.form['year']
+        semester = request.form['semester']
+        section = request.form['section']
+
+        conn = db()   # ✅ FIXED
+        cur = conn.cursor()
+
+        # 1. Student + Answers
+        cur.execute("""
+        SELECT sf.name, sf.roll, sf.subject,
+               a.q1, a.q2, a.q3, a.q4, a.q5,
+               a.q6, a.q7, a.q8, a.q9, a.q10
+        FROM students_feedback sf
+        JOIN answers a ON sf.id = a.feedback_id
+        WHERE sf.branch=%s AND sf.year=%s 
+        AND sf.semester=%s AND sf.section=%s
+        """, (branch, year, semester, section))
+
+        data = cur.fetchall()
+
+        # 2. Subject Summary
+        cur.execute("""
+        SELECT subject, COUNT(*) 
+        FROM students_feedback
+        WHERE branch=%s AND year=%s 
+        AND semester=%s AND section=%s
+        GROUP BY subject
+        """, (branch, year, semester, section))
+
+        summary = cur.fetchall()
+
+        cur.close()
+        conn.close()
+
+    return render_template("admin_report.html", data=data, summary=summary)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
