@@ -9,7 +9,6 @@ cur = conn.cursor()
 
 print("✅ Connected to Render PostgreSQL")
 
-# ------------------ DROP OLD TABLES ------------------
 # ------------------ USERS TABLE ------------------
 cur.execute("""
 CREATE TABLE users(
