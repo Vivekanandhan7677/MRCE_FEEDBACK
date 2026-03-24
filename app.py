@@ -450,47 +450,7 @@ def report():
     doc.build(elements)
     return send_file(file, as_attachment=True)
 
-from openpyxl import Workbook
-from flask import send_file
 
-@app.route("/download_excel")
-def download_excel():
-    data = session.get("report_data")
-
-    if not data:
-        return "Generate report first"
-
-    rows = data["rows"]
-    year, semester, branch, section, subject, faculty = data["info"]
-    percentage = data["percentage"]
-
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Feedback Report"
-
-    # Header Info
-    ws.append(["MALLA REDDY COLLEGE OF ENGINEERING"])
-    ws.append([])
-    ws.append(["Branch", branch, "Year", year])
-    ws.append(["Semester", semester, "Section", section])
-    ws.append(["Subject", subject, "Faculty", faculty])
-    ws.append(["Overall Percentage", f"{percentage:.2f}%"])
-    ws.append([])
-
-    # Questions Header
-    ws.append([
-        "Q1","Q2","Q3","Q4","Q5",
-        "Q6","Q7","Q8","Q9","Q10"
-    ])
-
-    # Data rows
-    for row in rows:
-        ws.append(list(row))
-
-    file = "feedback_report.xlsx"
-    wb.save(file)
-
-    return send_file(file, as_attachment=True)
 
 
 
