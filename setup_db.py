@@ -2,7 +2,7 @@ import psycopg2
 
 # PostgreSQL connection
 conn = psycopg2.connect(
-    "postgresql://feedback_db_f0p9_user:01qTqdmgZWj9HywhURaIEqEPhOyIaS1t@dpg-d6kk3h3h46gs73cvutt0-a.oregon-postgres.render.com/feedback_db_f0p9"
+    "postgresql://student_feedback_db_r3f0_user:QbYWdmUt4ClURRMyURRCe8J9keXlLPNT@dpg-d716ij15pdvs73fq3j8g-a.oregon-postgres.render.com/student_feedback_db_r3f0"
 )
 
 cur = conn.cursor()
