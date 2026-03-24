@@ -487,6 +487,44 @@ subjects_data = [
 ("CSE","IV","II","D","ORGANIZATIONAL BEHAVIOUR","Ms. SUFIA ENAYAT"),
 ("CSE","IV","II","D","HUMAN COMPUTER INTERACTION","Dr. MANJUNATH GADIPARTHI"),
 ("CSE","IV","II","D","CHAT BOT","Dr. MARAM ASHOK"),
+
+
+#---CSE I-II---
+("CSE","I","II","A","Engineering Drawing & Computer Aided Drafting","Dr.V.Narasimha Reddy")
+("CSE","I","II","A","Ordinary Differential Equations & Vector Calculus","Mrs.K.Manjula Devi")
+("CSE","I","II","A","Advanced Engineering Physics","Mr.M.Sreekanth")
+("CSE","I","II","A","Data Structures","Mrs.J.Ravali")
+("CSE","I","II","A","Basic Electrical Engineering","Mr.D.R.K.Mahesh")
+
+("CSE","I","II","A","Basic Electrical Engineering Lab","Mr.D.R.K.Mahesh / Mr.Naveed Ahmed")
+("CSE","I","II","A","Data Structures Lab","Mrs.J.Ravali")
+("CSE","I","II","A","Python Programming Lab","Mrs.M.Deepika")
+("CSE","I","II","A","Advanced Engineering Physics Lab","Mr.M.Sreekanth / Mrs.P.Sumalatha")
+("CSE","I","II","A","IT Workshop Lab","Mrs.Ch.Pushpalatha")
+
+("CSE","I","II","B","Ordinary Differential Equations & Vector Calculus","Mrs.K.Manjula Devi")
+("CSE","I","II","B","Advanced Engineering Physics","Mrs.G.Nagamani")
+("CSE","I","II","B","Engineering Drawing & Computer Aided Drafting","Mr.N.Arjun")
+("CSE","I","II","B","Basic Electrical Engineering","Mr.K.Shankar")
+("CSE","I","II","B","Data Structures","Mrs.J.Ravali")
+
+("CSE","I","II","B","Advanced Engineering Physics Lab","Mrs.G.Nagamani / Mrs.P.Sumalatha")
+("CSE","I","II","B","Data Structures Lab","Mrs.J.Ravali")
+("CSE","I","II","B","Python Programming Lab","Mrs.M.Deepika")
+("CSE","I","II","B","Basic Electrical Engineering Lab","Mr.K.Shankar / Mr.Naveed Ahmed")
+("CSE","I","II","B","IT Workshop Lab","Mrs.V.Chaitanya")
+
+("CSE","I","II","C","Ordinary Differential Equations & Vector Calculus","Mrs.T.Sarala")
+("CSE","I","II","C","Advanced Engineering Physics","Mrs.K.Sandhya Rani")
+("CSE","I","II","C","Engineering Drawing & Computer Aided Drafting","Mr.N.Arjun")
+("CSE","I","II","C","Basic Electrical Engineering","Mr.V.Srinivasa Chary")
+("CSE","I","II","C","Data Structures","Mr.Murali Krishna")
+
+("CSE","I","II","C","Advanced Engineering Physics Lab","Mrs.K.Sandhya Rani / Mrs.P.Sumalatha")
+("CSE","I","II","C","Data Structures Lab","Mr.Murali Krishna")
+("CSE","I","II","C","Python Programming Lab","Mrs.M.Deepika")
+("CSE","I","II","C","Basic Electrical Engineering Lab","Mr.V.Srinivasa Chary / Mr.Naveed Ahmed")
+("CSE","I","II","C","IT Workshop Lab","Mr.O.Channa Reddy")
 ]
 
 cur.executemany("""
