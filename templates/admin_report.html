@@ -12,14 +12,38 @@ body{
 
 .card{
   background:white;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 10px 20px rgba(0,0,0,0.2);
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  max-width:1000px;
+  margin:auto;
+}
+
+h2{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+form{
+  text-align:center;
 }
 
 select,button{
-  padding:8px;
+  padding:10px;
   margin:5px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+button{
+  background:#36d1dc;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:0.9;
 }
 
 table{
@@ -38,6 +62,15 @@ th{
   background:#36d1dc;
   color:white;
 }
+
+.download-btn{
+  margin-top:20px;
+  background:#2ecc71;
+}
+
+.section-title{
+  margin-top:25px;
+}
 </style>
 </head>
 
@@ -47,37 +80,47 @@ th{
 
 <h2>📊 Admin Feedback Report</h2>
 
+<!-- ✅ FORM -->
 <form method="POST">
+
   <select name="branch" required>
     <option value="">Branch</option>
-    <option value="CSE_AI_ML">CSE(AI&ML)</option>
-    <option value="CSE">CSE</option>
-    <option value="CSD">CSD</option>
-    <option value="ECE">ECE</option>
+    <option value="CSE_AI_ML" {% if selected.branch=="CSE_AI_ML" %}selected{% endif %}>CSE(AI&ML)</option>
+    <option value="CSE" {% if selected.branch=="CSE" %}selected{% endif %}>CSE</option>
+    <option value="CSD" {% if selected.branch=="CSD" %}selected{% endif %}>CSD</option>
+    <option value="ECE" {% if selected.branch=="ECE" %}selected{% endif %}>ECE</option>
   </select>
 
   <select name="year" required>
     <option value="">Year</option>
-    <option>I</option><option>II</option>
-    <option>III</option><option>IV</option>
+    <option {% if selected.year=="I" %}selected{% endif %}>I</option>
+    <option {% if selected.year=="II" %}selected{% endif %}>II</option>
+    <option {% if selected.year=="III" %}selected{% endif %}>III</option>
+    <option {% if selected.year=="IV" %}selected{% endif %}>IV</option>
   </select>
 
   <select name="semester" required>
     <option value="">Semester</option>
-    <option>I</option><option>II</option>
+    <option {% if selected.semester=="I" %}selected{% endif %}>I</option>
+    <option {% if selected.semester=="II" %}selected{% endif %}>II</option>
   </select>
 
   <select name="section" required>
     <option value="">Section</option>
-    <option>A</option><option>B</option>
-    <option>C</option><option>D</option>
+    <option {% if selected.section=="A" %}selected{% endif %}>A</option>
+    <option {% if selected.section=="B" %}selected{% endif %}>B</option>
+    <option {% if selected.section=="C" %}selected{% endif %}>C</option>
+    <option {% if selected.section=="D" %}selected{% endif %}>D</option>
   </select>
 
   <button type="submit">View Report</button>
 </form>
 
-<!-- ✅ SUBJECT SUMMARY -->
-<h3>📌 Responses Per Subject</h3>
+<!-- ✅ SHOW ONLY AFTER DATA -->
+{% if data %}
+
+<!-- SUBJECT SUMMARY -->
+<h3 class="section-title">📌 Responses Per Subject</h3>
 <table>
 <tr>
   <th>Subject</th>
@@ -92,8 +135,8 @@ th{
 {% endfor %}
 </table>
 
-<!-- ✅ STUDENT DETAILS -->
-<h3>👨‍🎓 Student Feedback Details</h3>
+<!-- STUDENT DETAILS -->
+<h3 class="section-title">👨‍🎓 Student Feedback Details</h3>
 <table>
 <tr>
   <th>Name</th>
@@ -121,6 +164,20 @@ th{
 </tr>
 {% endfor %}
 </table>
+
+<!-- ✅ DOWNLOAD BUTTON -->
+<form method="POST" action="/download_excel">
+    <input type="hidden" name="branch" value="{{ selected.branch }}">
+    <input type="hidden" name="year" value="{{ selected.year }}">
+    <input type="hidden" name="semester" value="{{ selected.semester }}">
+    <input type="hidden" name="section" value="{{ selected.section }}">
+
+    <button type="submit" class="download-btn">
+        ⬇ Download Excel Report
+    </button>
+</form>
+
+{% endif %}
 
 </div>
 

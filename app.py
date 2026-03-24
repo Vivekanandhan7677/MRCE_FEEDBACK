@@ -477,13 +477,29 @@ def admin_report():
     data = []
     summary = []
 
+    # 👉 store selected values
+    selected = {
+        "branch": "",
+        "year": "",
+        "semester": "",
+        "section": ""
+    }
+
     if request.method == 'POST':
         branch = request.form['branch']
         year = request.form['year']
         semester = request.form['semester']
         section = request.form['section']
 
-        conn = db()   # ✅ FIXED
+        # ✅ save selected values
+        selected = {
+            "branch": branch,
+            "year": year,
+            "semester": semester,
+            "section": section
+        }
+
+        conn = db()
         cur = conn.cursor()
 
         # 1. Student + Answers
@@ -513,9 +529,131 @@ def admin_report():
         cur.close()
         conn.close()
 
-    return render_template("admin_report.html", data=data, summary=summary)
+    return render_template(
+        "admin_report.html",
+        data=data,
+        summary=summary,
+        selected=selected   # ✅ pass to HTML
+    )
+from flask import send_file, request
+from openpyxl import Workbook
+from openpyxl.drawing.image import Image as XLImage
+from openpyxl.styles import Font, Alignment
+import io, os
 
+@app.route('/download_excel', methods=['POST'])
+def download_excel():
+    branch = request.form['branch']
+    year = request.form['year']
+    semester = request.form['semester']
+    section = request.form['section']
 
+    conn = db()
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT sf.name, sf.roll, sf.subject,
+           a.q1, a.q2, a.q3, a.q4, a.q5,
+           a.q6, a.q7, a.q8, a.q9, a.q10
+    FROM students_feedback sf
+    JOIN answers a ON sf.id = a.feedback_id
+    WHERE sf.branch=%s AND sf.year=%s 
+    AND sf.semester=%s AND sf.section=%s
+    """, (branch, year, semester, section))
+
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    # ✅ Create Workbook
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Feedback Report"
+
+    # ---------- LOGO ----------
+    logo_path = os.path.join(app.root_path, 'static', 'logo.png')
+    if os.path.exists(logo_path):
+        logo = XLImage(logo_path)
+        logo.width = 80
+        logo.height = 80
+        ws.add_image(logo, "A1")
+
+    # ---------- COLLEGE NAME ----------
+    ws.merge_cells("A5:M5")
+    cell = ws["A5"]
+    cell.value = "MALLA REDDY COLLEGE OF ENGINEERING"
+    cell.font = Font(size=16, bold=True)
+    cell.alignment = Alignment(horizontal="center")
+
+    ws.merge_cells("A6:M6")
+    ws["A6"] = "Feedback Report"
+    ws["A6"].alignment = Alignment(horizontal="center")
+
+    # ---------- TABLE HEADER ----------
+    headers = ["Name", "Roll", "Subject",
+               "Q1","Q2","Q3","Q4","Q5",
+               "Q6","Q7","Q8","Q9","Q10"]
+
+    ws.append([])
+    ws.append(headers)
+
+    for col in ws[8]:
+        col.font = Font(bold=True)
+        col.alignment = Alignment(horizontal="center")
+
+    # ---------- DATA ----------
+    for row in rows:
+        ws.append(row)
+
+    # ---------- AUTO WIDTH ----------
+    for col in ws.columns:
+        max_length = 0
+        col_letter = col[0].column_letter
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        ws.column_dimensions[col_letter].width = max_length + 2
+
+    # ---------- SIGNATURES ----------
+    last_row = ws.max_row + 4
+
+    ws.merge_cells(f"A{last_row}:C{last_row}")
+    ws.merge_cells(f"K{last_row}:M{last_row}")
+
+    ws[f"A{last_row}"] = "HOD Signature"
+    ws[f"K{last_row}"] = "Principal Signature"
+
+    ws[f"A{last_row}"].alignment = Alignment(horizontal="center")
+    ws[f"K{last_row}"].alignment = Alignment(horizontal="center")
+
+    # Optional: add signature images
+    hod_sign = os.path.join(app.root_path, 'static', 'hod_sign.png')
+    principal_sign = os.path.join(app.root_path, 'static', 'principal_sign.png')
+
+    if os.path.exists(hod_sign):
+        img1 = XLImage(hod_sign)
+        img1.width = 120
+        img1.height = 50
+        ws.add_image(img1, f"A{last_row+1}")
+
+    if os.path.exists(principal_sign):
+        img2 = XLImage(principal_sign)
+        img2.width = 120
+        img2.height = 50
+        ws.add_image(img2, f"K{last_row+1}")
+
+    # ---------- SAVE ----------
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    return send_file(output,
+                     download_name="feedback_report.xlsx",
+                     as_attachment=True)
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
