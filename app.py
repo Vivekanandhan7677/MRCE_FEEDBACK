@@ -13,7 +13,7 @@ app.secret_key = "feedback_secret_key"
 
 
 # ---------- DB CONNECTION ----------
-
+#---------- FIXED: Use DATABASE_URL env variable for PostgreSQL connection ----------
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
