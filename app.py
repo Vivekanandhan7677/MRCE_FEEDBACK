@@ -621,6 +621,32 @@ def download_excel():
     for row in rows:
         ws.append(row)
 
+    # ---------- ⭐ RATING SCALE TABLE ----------
+    start_row = ws.max_row + 3
+
+    ws[f"A{start_row}"] = "Rating Scale"
+    ws[f"A{start_row}"].font = Font(bold=True)
+
+    rating_data = [
+        ("Rating", "Meaning"),
+        (5, "Very Good"),
+        (4, "Good"),
+        (3, "Average"),
+        (2, "Below Average"),
+        (1, "Poor")
+    ]
+
+    for i, row in enumerate(rating_data, start=start_row + 1):
+        ws[f"A{i}"] = row[0]
+        ws[f"B{i}"] = row[1]
+
+        ws[f"A{i}"].alignment = Alignment(horizontal="center")
+        ws[f"B{i}"].alignment = Alignment(horizontal="center")
+
+        if i == start_row + 1:  # header row
+            ws[f"A{i}"].font = Font(bold=True)
+            ws[f"B{i}"].font = Font(bold=True)
+
     # ---------- AUTO WIDTH ----------
     for col in ws.columns:
         max_length = 0
@@ -645,7 +671,7 @@ def download_excel():
     ws[f"A{last_row}"].alignment = Alignment(horizontal="center")
     ws[f"K{last_row}"].alignment = Alignment(horizontal="center")
 
-    # Optional: add signature images
+    # ---------- SIGNATURE IMAGES ----------
     hod_sign = os.path.join(app.root_path, 'static', 'hod_sign.png')
     principal_sign = os.path.join(app.root_path, 'static', 'principal_sign.png')
 
