@@ -63,6 +63,11 @@ th{
   color:white;
 }
 
+/* ⭐ Optional styling improvement */
+table tr:nth-child(even){
+  background:#f2f2f2;
+}
+
 .download-btn{
   margin-top:20px;
   background:#2ecc71;
@@ -165,6 +170,20 @@ th{
   <td>{{ row[12] }}</td>
 </tr>
 {% endfor %}
+</table>
+
+<!-- ⭐ RATING SCALE TABLE -->
+<h3 class="section-title">⭐ Rating Scale</h3>
+<table>
+<tr>
+  <th>Rating</th>
+  <th>Meaning</th>
+</tr>
+<tr><td>5</td><td>Very Good</td></tr>
+<tr><td>4</td><td>Good</td></tr>
+<tr><td>3</td><td>Average</td></tr>
+<tr><td>2</td><td>Below Average</td></tr>
+<tr><td>1</td><td>Poor</td></tr>
 </table>
 
 <!-- ✅ DOWNLOAD BUTTON -->
