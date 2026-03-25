@@ -58,7 +58,7 @@ def student_login():
         con = db()
         cur = con.cursor()
 
-        # Auto create student
+        # ✅ AUTO CREATE STUDENT
         cur.execute("SELECT role FROM users WHERE username=%s", (username,))
         user = cur.fetchone()
 
@@ -69,18 +69,33 @@ def student_login():
             )
             con.commit()
 
+        # ✅ VALIDATE LOGIN
         cur.execute(
             "SELECT role FROM users WHERE username=%s AND password=%s",
             (username, password)
         )
         user = cur.fetchone()
+
+        # ❌ INVALID LOGIN
+        if not user or user[0] != "student":
+            con.close()
+            return "Invalid Student Login"
+
+        # ✅ CHECK IF FEEDBACK ALREADY SUBMITTED
+        cur.execute(
+            "SELECT 1 FROM students_feedback WHERE roll=%s LIMIT 1",
+            (username,)
+        )
+        feedback_exists = cur.fetchone()
+
+        if feedback_exists:
+            con.close()
+            return "❌ You have already submitted feedback!"
+
+        # ✅ ALLOW LOGIN
+        session["user"] = username
         con.close()
-
-        if user and user[0] == "student":
-            session["user"] = username
-            return redirect(url_for("student_page"))
-
-        return "Invalid Student Login"
+        return redirect(url_for("student_page"))
 
     return render_template("login_student.html")
 

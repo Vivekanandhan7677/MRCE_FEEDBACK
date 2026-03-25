@@ -1,0 +1,63 @@
+[33m8f1a319[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m First Year Updated
+[33m06d059c[m First Year Updated
+[33m58cfd53[m First Year Updated
+[33mfd9c149[m First Year Updated
+[33mbeb91e7[m First Year Updated
+[33m3c03e37[m First Year Updated
+[33mf516dbe[m First Year Updated
+[33m819e928[m First Year Updated
+[33m912e485[m First Year Updated
+[33m0d4c250[m First Year Updated
+[33mfc94adc[m First Year Updated
+[33mfdb8e81[m Added openpyxl dependency
+[33me820dff[m Added openpyxl dependency
+[33m475d22c[m Added openpyxl dependency
+[33me471700[m Added openpyxl dependency
+[33m80de956[m Added openpyxl dependency
+[33mec302cf[m Updated admin report and fixed database connection
+[33m8d3a669[m Updated admin report and fixed database connection
+[33m7cda82f[m Initial commit - Flask Feedback System
+[33m608dab3[m added suggestions to pdf report
+[33mc639325[m added suggestions to pdf report
+[33m76a4ae7[m added suggestions to pdf report
+[33mb71f46b[m added suggestions to pdf report
+[33m85d40c5[m fixed render port issue
+[33m8ba6dad[m fixed student feedback insertion
+[33m58b8c72[m fixed faculty column error
+[33m8a9bc67[m fixed multi subject feedback submit
+[33m621135a[m updated student feedback page
+[33m0316761[m updated student feedback page
+[33m8165b59[m updated student feedback page
+[33me035ed6[m Fix render port
+[33ma686ce0[m Fix render port
+[33mba09b06[m Fix render port
+[33m6f0b55a[m Fix render port
+[33m5d2bb7b[m PostgreSQL integration
+[33mc33bef0[m Initial commit
+[33mb4b63a0[m final
+[33m7b3f368[m final
+[33mef6a308[m final
+[33m8007386[m final
+[33mbece55d[m final
+[33m498c383[m final
+[33mb444b94[m final
+[33m1a31392[m final
+[33m15d4e59[m final
+[33mcabf928[m final
+[33m32671f2[m final
+[33m4d84dce[m Final DB fix
+[33m3f3f71b[m Fix dependencies and db logic
+[33me2a2e30[m Fix urlparse module callable error
+[33m794a185[m FINAL DB FIX
+[33m34d69ce[m Fix db to use MYSQL_URL correctly
+[33m3b450e2[m Fixed Railway DB connection using MYSQL_URL
+[33m3d75131[m Use MYSQL_URL for Railway DB
+[33m5e950ff[m fixed db crash
+[33mccefe63[m fixed railway mysql connection
+[33m080d16d[m correct railway env names
+[33m760c95e[m fix mysql for render
+[33m93765e0[m connect to railway mysql
+[33m3054458[m add reportlab
+[33m53348ea[m add mysql connector
+[33m1e6194b[m clean requirements for render
+[33md682f2e[m first upload for render
